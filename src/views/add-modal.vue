@@ -5,10 +5,10 @@
     width="50%">
     <!-- <el-form ref="form"  :rules="rules" :model="form" label-width="80px"> -->
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-      <el-form-item label="姓名">
+      <el-form-item label="姓名" prop="name">
         <el-input v-model="ruleForm.name"></el-input>
       </el-form-item>
-      <el-form-item label="日期">
+      <el-form-item label="日期" prop="date">
         <el-date-picker
         type="date"
         format="yyyy 年 MM 月 dd 日"
@@ -17,7 +17,7 @@
         v-model="ruleForm.date"
         style="width: 100%;"></el-date-picker>
       </el-form-item>
-      <el-form-item label="金额">
+      <el-form-item label="金额" prop="money">
         <el-input v-model="ruleForm.money"></el-input>
       </el-form-item>
       <el-form-item label="欠款状态">
@@ -30,10 +30,6 @@
       <el-form-item label="备注">
         <el-input v-model="ruleForm.memo"></el-input>
       </el-form-item>
-      <!-- <el-form-item>
-        <el-button type="primary" @click="onSubmit">立即创建</el-button>
-        <el-button>取消</el-button>
-      </el-form-item> -->
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancel">取 消</el-button>
@@ -101,14 +97,10 @@ export default {
   },
   methods: {
     onSubmit () {
-      // debugger
-      debugger
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
-          // alert('submit!');
           this.$emit('onSubmit', this.ruleForm)
         } else {
-          // console.log('error submit!!');
           return false
         }
       })

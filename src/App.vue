@@ -41,7 +41,7 @@
     :page-sizes="[100, 200, 300, 400]"
     :page-size="100"
     layout="total, sizes, prev, pager, next, jumper"
-    :total="400">
+    :total="total">
   </el-pagination>
   <add-modal
   :dialogVisible="dialogVisible"
@@ -72,7 +72,8 @@ export default {
       ],
       dialogVisible: false,
       detailData: {},
-      currentPage: 0
+      currentPage: 0,
+      total: 400
     }
   },
   methods: {
