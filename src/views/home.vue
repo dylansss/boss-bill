@@ -37,7 +37,7 @@
   <el-pagination
     @size-change="handleSizeChange"
     @current-change="handleCurrentChange"
-    :current-page="currentPage"
+    :current-page="start"
     :page-sizes="[100, 200, 300, 400]"
     :page-size="100"
     layout="total, sizes, prev, pager, next, jumper"
@@ -58,6 +58,7 @@
 import addModal from '../components/pc/add-modal'
 import detailModal from '../components/pc/detail-modal'
 import bbHead from '../components/pc/bb-head'
+import api from '../api/api'
 export default {
   components: {
     addModal,
@@ -78,7 +79,8 @@ export default {
       dialogVisible: false,
       detailDialogVisible: false,
       detailData: {},
-      currentPage: 0,
+      start: 0,
+      size: 100,
       total: 400
     }
   },
@@ -93,10 +95,14 @@ export default {
       //   status: '2'
       // }
     },
-    onSubmit (params) {
-      console.log(params)
+    onSubmit () {
+      // console.log(params)
+      this.$message({
+        message: '账单已保存',
+        type: 'success'
+      })
       this.dialogVisible = false
-      this.tableData.push(params)
+      // this.tableData.push(params)
     },
     // cancel () {
     //   this.dialogVisible = false
@@ -105,14 +111,26 @@ export default {
       this.detailData = row
       this.detailDialogVisible = true
     },
-    search (value) {
-      console.log(value)
+    search (params) {
+      console.log(params)
+      const axiosData = Object.assign({}, params, {
+        start: this.start,
+        size: this.size
+      })
+      api.getList(axiosData).then(res => {
+        this.tableData = res.data
+      })
     },
     handleSizeChange (val) {
-      console.log(`每页 ${val} 条`)
+      this.size = val
+      this.start = 1
+      this.search()
+      // console.log(`每页 ${val} 条`)
     },
     handleCurrentChange (val) {
-      console.log(`当前页: ${val}`)
+      this.start = val
+      this.search()
+      // console.log(`当前页: ${val}`)
     }
   }
 }

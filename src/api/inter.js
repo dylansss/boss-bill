@@ -1,0 +1,30 @@
+import Axios from 'axios'
+import { showLoading, hideLoading } from './loading'
+
+// 添加请求拦截器
+Axios.interceptors.request.use(function (config) {
+  // 在发送请求之前做些什么
+  const publicPath = '/watter/'
+  let currentUrl = config.url
+  config.url = publicPath + currentUrl
+  // config.url = '/watter/fq/'
+  // config.url = `/watter/fq/${config.url}`
+  console.log(config)
+  showLoading()
+  return config
+}, function (error) {
+  hideLoading()
+  // 对请求错误做些什么
+  return Promise.reject(error)
+})
+
+// 添加响应拦截器
+Axios.interceptors.response.use(function (response) {
+  // 对响应数据做点什么
+  hideLoading()
+  return response
+}, function (error) {
+  hideLoading()
+  // 对响应错误做点什么
+  return Promise.reject(error)
+})

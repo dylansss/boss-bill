@@ -29,7 +29,7 @@
       </el-form-item>
       <el-form-item label="上传图片">
         <el-upload
-          action="https://jsonplaceholder.typicode.com/posts/"
+          action="/watter/fq/file"
           multiple
           list-type="picture-card"
           :file-list="fileList"
@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import api from '../../api/api'
 export default {
   name: 'add-moadl',
   props: {
@@ -117,7 +118,12 @@ export default {
     onSubmit () {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
-          this.$emit('onSubmit', this.ruleForm)
+          api.save(this.ruleForm).then(res => {
+            console.log(res)
+            this.$emit('onSubmit')
+          }).catch(err => {
+            console.log(err)
+          })
         } else {
           return false
         }

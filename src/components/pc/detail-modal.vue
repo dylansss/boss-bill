@@ -48,12 +48,13 @@
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancel">关闭</el-button>
-      <!-- <el-button type="primary" @click="onSubmit">确 定</el-button> -->
+      <el-button type="primary" @click="onSubmit">确 定</el-button>
     </span>
   </el-dialog>
 </template>
 
 <script>
+import api from '../../api/api'
 export default {
   name: 'add-moadl',
   props: {
@@ -123,15 +124,20 @@ export default {
     }
   },
   methods: {
-    // onSubmit () {
-    //   this.$refs.ruleForm.validate(valid => {
-    //     if (valid) {
-    //       this.$emit('onSubmit', this.ruleForm)
-    //     } else {
-    //       return false
-    //     }
-    //   })
-    // },
+    onSubmit () {
+      this.$refs.ruleForm.validate(valid => {
+        if (valid) {
+          api.edit(this.ruleForm).then(res => {
+            console.log(res)
+            this.$emit('onSubmit')
+          }).catch(err => {
+            console.log(err)
+          })
+        } else {
+          return false
+        }
+      })
+    },
     cancel () {
       this.$emit('cancel')
     },

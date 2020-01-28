@@ -3,9 +3,13 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import ElementUI from 'element-ui'
+import './utils/index'
 import 'element-ui/lib/theme-chalk/index.css'
+// 引入axios，并加到原型链中
+// import axios from 'axios';
 
 Vue.use(ElementUI)
+// Vue.use(axios)
 
 Vue.config.productionTip = false
 
