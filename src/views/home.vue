@@ -82,7 +82,11 @@ export default {
       start: 1,
       size: 100,
       total: 400,
-      searchParams: {}
+      searchParams: {
+        name: '',
+        startDate: new Date('2020-01-01'),
+        endDate: new Date()
+      }
     }
   },
   methods: {
@@ -120,12 +124,16 @@ export default {
     search (params) {
       this.searchParams = params
       // console.log(params)
+      this.start = 1
       this.getList()
     },
     getList () {
       const axiosData = Object.assign({}, this.searchParams, {
         start: this.start,
         size: this.size
+      },{
+        startDate: new Date(this.searchParams.startDate).format('yyyy-MM-dd'),
+        endDate: new Date(this.searchParams.endDate).format('yyyy-MM-dd')
       })
       api.getList(axiosData).then(res => {
         console.log(res)

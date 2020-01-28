@@ -56,8 +56,8 @@ export default {
   methods: {
     handleSearch () {
       const params = {
-        startDate: new Date(this.ruleForm.startDate).format('yyyy-MM-dd'),
-        endDate: new Date(this.ruleForm.endDate).format('yyyy-MM-dd'),
+        startDate: this.ruleForm.startDate,
+        endDate: this.ruleForm.endDate,
         name: this.ruleForm.name
       }
       if (this.ruleForm.status !== '3') {
