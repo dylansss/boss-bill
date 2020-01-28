@@ -29,7 +29,7 @@
       </el-form-item>
       <el-form-item label="上传图片">
         <el-upload
-          action="/watter/fq/file"
+          action="http://106.54.44.66:8080/watter/fq/file"
           multiple
           list-type="picture-card"
           :file-list="fileList"
@@ -62,18 +62,6 @@ export default {
       type: Boolean,
       default: false
     }
-    // detailData: {
-    //   type: Object,
-    //   default: () => {
-    //     return {
-    //       name: '',
-    //       date: new Date(),
-    //       money: '',
-    //       memo: '',
-    //       status: '2'
-    //     }
-    //   }
-    // }
   },
   computed: {
     isShowDialog: {
@@ -90,6 +78,7 @@ export default {
   },
   data () {
     return {
+      imgList: [],
       fileList: [],
       dialogImageUrl: '',
       elDialogVisible: false,
@@ -99,7 +88,8 @@ export default {
         date: new Date(),
         money: '',
         memo: '',
-        status: '2'
+        status: '2',
+        picUrl: ''
       },
       rules: {
         name: [
@@ -118,9 +108,14 @@ export default {
     onSubmit () {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
+          console.log(this.imgList, 'this.imgList')
+          this.ruleForm.picUrl = this.imgList.map(v => {
+            return v.url
+          }).join(',')
           api.save(this.ruleForm).then(res => {
-            console.log(res)
-            this.$emit('onSubmit')
+            if (res.status === 200) {
+              this.$emit('onSubmit', 1)
+            }
           }).catch(err => {
             console.log(err)
           })
@@ -134,6 +129,12 @@ export default {
     },
     handleRemove (file, fileList) {
       console.log(file, fileList)
+      this.imgList = fileList.map(v => {
+        return {
+          name: v.name,
+          url: v.response ? v.response.data : v.url
+        }
+      })
     },
     handlePictureCardPreview (file) {
       this.dialogImageUrl = file.url
@@ -143,13 +144,26 @@ export default {
       console.log(response)
       console.log(file)
       console.log(fileList)
+      const obj = {
+        name: '',
+        url: response.data
+      }
+      this.imgList.push(obj)
+    }
+  },
+  watch: {
+    isShowDialog (v) {
+      this.ruleForm = {
+        name: '',
+        date: new Date(),
+        money: '',
+        memo: '',
+        status: '2',
+        picUrl: ''
+      }
+      this.imgList = []
     }
   }
-  // watch: {
-  //   isShowDialog () {
-  //     this.ruleForm = this.detailData
-  //   }
-  // }
 }
 </script>
 

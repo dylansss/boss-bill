@@ -29,7 +29,7 @@
       </el-form-item>
       <el-form-item label="上传图片">
         <el-upload
-          action="https://jsonplaceholder.typicode.com/posts/"
+          action="http://106.54.44.66:8080/watter/fq/file"
           multiple
           list-type="picture-card"
           :file-list="fileList"
@@ -90,16 +90,8 @@ export default {
   },
   data () {
     return {
-      fileList: [
-        {
-          name: '',
-          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-        },
-        {
-          name: 'food2.jpeg',
-          url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-        }
-      ],
+      fileList: [],
+      imgList: [],
       dialogImageUrl: '',
       elDialogVisible: false,
       // isShowDialog: this.detailDialogVisible,
@@ -108,7 +100,8 @@ export default {
         date: new Date(),
         money: '',
         memo: '',
-        status: '2'
+        status: '2',
+        picUrl: ''
       },
       rules: {
         name: [
@@ -127,9 +120,14 @@ export default {
     onSubmit () {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
+          this.ruleForm.picUrl = this.imgList.map(v => {
+            return v.url
+          }).join(',')
           api.edit(this.ruleForm).then(res => {
             console.log(res)
-            this.$emit('onSubmit')
+            if (res.status === 200) {
+              this.$emit('onSubmit', 2)
+            }
           }).catch(err => {
             console.log(err)
           })
@@ -142,7 +140,14 @@ export default {
       this.$emit('cancel')
     },
     handleRemove (file, fileList) {
-      console.log(file, fileList)
+      console.log(fileList)
+      this.imgList = fileList.map(v => {
+        return {
+          name: v.name,
+          url: v.response ? v.response.data : v.url
+        }
+      })
+      console.log(this.imgList, 'this.imgList')
     },
     handlePictureCardPreview (file) {
       this.dialogImageUrl = file.url
@@ -150,13 +155,37 @@ export default {
     },
     handleSuccess (response, file, fileList) {
       console.log(response)
-      console.log(file)
-      console.log(fileList)
+      // console.log(file)
+      // console.log(fileList)
+      const obj = {
+        name: '',
+        url: response.data
+      }
+      this.imgList.push(obj)
+      // fileList.map(v => {
+      // })
+      console.log(this.imgList, 'this.imgList')
     }
   },
   watch: {
-    isShowDialog () {
-      this.ruleForm = this.detailData
+    isShowDialog (v) {
+      if (!v) {
+        this.elDialogVisible = false
+        this.fileList = []
+        this.imgList = []
+      } else {
+        this.ruleForm = this.detailData
+        let pics = this.detailData.picUrl.split(',')
+        pics.map(v => {
+          const obj = {
+            name: '',
+            url: v
+          }
+          this.fileList.push(obj)
+          this.imgList.push(obj)
+        })
+        console.log(this.imgList, 'this.imgList')
+      }
     }
   }
 }

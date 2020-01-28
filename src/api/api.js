@@ -3,10 +3,11 @@ import Axios from 'axios'
 
 const api = {
   save (params) {
+    console.log(params, 'params')
     const axiosData = {
       name: params.name,
       money: params.money,
-      picurl: params.picurl,
+      picUrl: params.picUrl,
       status: params.status,
       memo: params.memo,
       date: new Date(params.date).format('yyyy-MM-dd')
@@ -18,6 +19,9 @@ const api = {
   },
   getList (params) {
     return Axios.post('fq', params)
+  },
+  file (params) {
+    return Axios.post('fq/file', params)
   }
 }
 export default api

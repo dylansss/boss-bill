@@ -8,7 +8,7 @@
     :data="tableData"
     stripe
     border
-    height="530"
+    height="440"
     style="width: 100%"
     @row-click="viewDetail">
     <el-table-column
@@ -28,6 +28,9 @@
     <el-table-column
       prop="status"
       label="状态">
+      <template slot-scope="scope">
+        <div>{{statusList[scope.row.status]}}</div>
+      </template>
     </el-table-column>
     <el-table-column
       prop="memo"
@@ -67,21 +70,19 @@ export default {
   },
   data () {
     return {
-      tableData: [
-        {
-          date: '2016-05-02',
-          name: '王小虎',
-          money: '11111',
-          memo: '备注',
-          status: '2'
-        }
-      ],
+      statusList: {
+        0: '已还清',
+        1: '部分还清',
+        2: '未还'
+      },
+      tableData: [],
       dialogVisible: false,
       detailDialogVisible: false,
       detailData: {},
-      start: 0,
+      start: 1,
       size: 100,
-      total: 400
+      total: 400,
+      searchParams: {}
     }
   },
   methods: {
@@ -95,13 +96,18 @@ export default {
       //   status: '2'
       // }
     },
-    onSubmit () {
+    onSubmit (type) {
       // console.log(params)
       this.$message({
         message: '账单已保存',
         type: 'success'
       })
-      this.dialogVisible = false
+      if (type === 1) {
+        this.dialogVisible = false
+      } else {
+        this.detailDialogVisible = false
+      }
+      this.getList()
       // this.tableData.push(params)
     },
     // cancel () {
@@ -112,26 +118,35 @@ export default {
       this.detailDialogVisible = true
     },
     search (params) {
-      console.log(params)
-      const axiosData = Object.assign({}, params, {
+      this.searchParams = params
+      // console.log(params)
+      this.getList()
+    },
+    getList () {
+      const axiosData = Object.assign({}, this.searchParams, {
         start: this.start,
         size: this.size
       })
       api.getList(axiosData).then(res => {
-        this.tableData = res.data
+        console.log(res)
+        this.tableData = res.data.records
+        console.log(this.tableData, 'this.tableData')
       })
     },
     handleSizeChange (val) {
       this.size = val
       this.start = 1
-      this.search()
+      this.getList()
       // console.log(`每页 ${val} 条`)
     },
     handleCurrentChange (val) {
       this.start = val
-      this.search()
+      this.getList()
       // console.log(`当前页: ${val}`)
     }
+  },
+  created () {
+    this.getList()
   }
 }
 </script>
