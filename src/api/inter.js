@@ -7,9 +7,6 @@ Axios.interceptors.request.use(function (config) {
   const publicPath = 'http://106.54.44.66:8080/watter/'
   let currentUrl = config.url
   config.url = publicPath + currentUrl
-  // config.url = '/watter/fq/'
-  // config.url = `/watter/fq/${config.url}`
-  // console.log(config)
   showLoading()
   return config
 }, function (error) {

@@ -101,7 +101,6 @@ export default {
       // }
     },
     onSubmit (type) {
-      // console.log(params)
       this.$message({
         message: '账单已保存',
         type: 'success'
@@ -123,7 +122,6 @@ export default {
     },
     search (params) {
       this.searchParams = params
-      // console.log(params)
       this.start = 1
       this.getList()
     },
@@ -131,26 +129,22 @@ export default {
       const axiosData = Object.assign({}, this.searchParams, {
         start: this.start,
         size: this.size
-      },{
+      }, {
         startDate: new Date(this.searchParams.startDate).format('yyyy-MM-dd'),
         endDate: new Date(this.searchParams.endDate).format('yyyy-MM-dd')
       })
       api.getList(axiosData).then(res => {
-        console.log(res)
         this.tableData = res.data.records
-        console.log(this.tableData, 'this.tableData')
       })
     },
     handleSizeChange (val) {
       this.size = val
       this.start = 1
       this.getList()
-      // console.log(`每页 ${val} 条`)
     },
     handleCurrentChange (val) {
       this.start = val
       this.getList()
-      // console.log(`当前页: ${val}`)
     }
   },
   created () {

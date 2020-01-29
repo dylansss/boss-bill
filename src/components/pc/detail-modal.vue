@@ -78,11 +78,9 @@ export default {
   computed: {
     isShowDialog: {
       get () {
-        console.log('你俩谁先啊')
         return this.detailDialogVisible
       },
       set () {
-        console.log('咋用的啊？')
         // this.$emit('cancel')
         this.cancel()
       }
@@ -124,12 +122,9 @@ export default {
             return v.url
           }).join(',')
           api.edit(this.ruleForm).then(res => {
-            console.log(res)
             if (res.status === 200) {
               this.$emit('onSubmit', 2)
             }
-          }).catch(err => {
-            console.log(err)
           })
         } else {
           return false
@@ -140,23 +135,18 @@ export default {
       this.$emit('cancel')
     },
     handleRemove (file, fileList) {
-      console.log(fileList)
       this.imgList = fileList.map(v => {
         return {
           name: v.name,
           url: v.response ? v.response.data : v.url
         }
       })
-      console.log(this.imgList, 'this.imgList')
     },
     handlePictureCardPreview (file) {
       this.dialogImageUrl = file.url
       this.elDialogVisible = true
     },
     handleSuccess (response, file, fileList) {
-      console.log(response)
-      // console.log(file)
-      // console.log(fileList)
       const obj = {
         name: '',
         url: response.data
@@ -164,7 +154,6 @@ export default {
       this.imgList.push(obj)
       // fileList.map(v => {
       // })
-      console.log(this.imgList, 'this.imgList')
     }
   },
   watch: {
@@ -184,7 +173,6 @@ export default {
           this.fileList.push(obj)
           this.imgList.push(obj)
         })
-        console.log(this.imgList, 'this.imgList')
       }
     }
   }

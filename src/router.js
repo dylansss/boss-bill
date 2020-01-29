@@ -13,7 +13,7 @@ export default new Router({
     {
       path: '/home',
       name: 'home',
-      component: () => import(/*chuankfilename:home*/'./views/home')
+      component: () => import('./views/home')
     },
     {
       path: '/home-web',

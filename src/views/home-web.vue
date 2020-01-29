@@ -79,7 +79,6 @@ export default {
       this.$router.push('/h5-detail')
     },
     search (value) {
-      console.log(value)
     }
   }
 }

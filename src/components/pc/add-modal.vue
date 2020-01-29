@@ -66,11 +66,9 @@ export default {
   computed: {
     isShowDialog: {
       get () {
-        console.log('你俩谁先啊')
         return this.dialogVisible
       },
       set () {
-        console.log('咋用的啊？')
         // this.$emit('cancel')
         this.cancel()
       }
@@ -108,7 +106,6 @@ export default {
     onSubmit () {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
-          console.log(this.imgList, 'this.imgList')
           this.ruleForm.picUrl = this.imgList.map(v => {
             return v.url
           }).join(',')
@@ -116,8 +113,6 @@ export default {
             if (res.status === 200) {
               this.$emit('onSubmit', 1)
             }
-          }).catch(err => {
-            console.log(err)
           })
         } else {
           return false
@@ -128,7 +123,6 @@ export default {
       this.$emit('cancel')
     },
     handleRemove (file, fileList) {
-      console.log(file, fileList)
       this.imgList = fileList.map(v => {
         return {
           name: v.name,
@@ -141,9 +135,6 @@ export default {
       this.elDialogVisible = true
     },
     handleSuccess (response, file, fileList) {
-      console.log(response)
-      console.log(file)
-      console.log(fileList)
       const obj = {
         name: '',
         url: response.data
@@ -162,6 +153,7 @@ export default {
         picUrl: ''
       }
       this.imgList = []
+      this.fileList = []
     }
   }
 }

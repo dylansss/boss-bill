@@ -73,11 +73,9 @@ export default {
   // computed: {
   //   isShowDialog: {
   //     get () {
-  //       console.log('你俩谁先啊')
   //       return this.dialogVisible
   //     },
   //     set () {
-  //       console.log('咋用的啊？')
   //       // this.$emit('cancel')
   //       this.cancel()
   //     }
@@ -112,7 +110,6 @@ export default {
     submitForm () {
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
-          console.log(this.ruleForm)
         } else {
           return false
         }
@@ -123,16 +120,12 @@ export default {
       this.$router.push('home-web')
     },
     handleRemove (file, fileList) {
-      console.log(file, fileList)
     },
     handlePictureCardPreview (file) {
       this.dialogImageUrl = file.url
       this.elDialogVisible = true
     },
     handleSuccess (response, file, fileList) {
-      console.log(response)
-      console.log(file)
-      console.log(fileList)
     }
   },
   watch: {
