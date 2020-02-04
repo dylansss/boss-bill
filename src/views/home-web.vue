@@ -29,6 +29,9 @@
       </div>
     </div>
   </div>
+  <div class="more" v-if="tableData.length >= 45" @click="getMoreData">
+    加载更多
+  </div>
 </div>
 </template>
 
@@ -49,7 +52,8 @@ export default {
       searchParams: {
         name: '',
         startDate: new Date('2020-01-01')
-      }
+      },
+      start: 1
     }
   },
   methods: {
@@ -71,12 +75,16 @@ export default {
         endDate: new Date().format('yyyy-MM-dd')
       },
       {
-        start: 1,
+        start: this.start,
         size: 50
       })
       api.getList(axiosData).then(res => {
         this.tableData = res.data.records
       })
+    },
+    getMoreData () {
+      this.start++
+      this.getList()
     }
   },
   created () {
