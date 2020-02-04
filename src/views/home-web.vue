@@ -34,39 +34,22 @@
 
 <script>
 import bbHead from '../components/mobile/bb-head'
+import api from '../api/api'
 export default {
   components: {
     bbHead
   },
   data () {
     return {
-      tableData: [
-        {
-          date: '2016-05-02',
-          name: '王小虎',
-          money: '11111',
-          memo: '备注',
-          status: '2'
-        },
-        {
-          date: '2016-05-02',
-          name: '王小虎',
-          money: '11111',
-          memo: '备注',
-          status: '1'
-        },
-        {
-          date: '2016-05-02',
-          name: '王小虎',
-          money: '11111',
-          memo: '备注',
-          status: '0'
-        }
-      ],
+      tableData: [],
       // dialogVisible: false,
       detailData: {},
       currentPage: 0,
-      total: 400
+      total: 400,
+      searchParams: {
+        name: '',
+        startDate: new Date('2020-01-01')
+      }
     }
   },
   methods: {
@@ -79,7 +62,28 @@ export default {
       this.$router.push('/h5-detail')
     },
     search (value) {
+      this.searchParams.name = value
+      this.getList()
+    },
+    getList () {
+      const axiosData = Object.assign({}, this.searchParams, {
+        startDate: new Date(this.searchParams.startDate).format('yyyy-MM-dd'),
+        endDate: new Date().format('yyyy-MM-dd')
+      },
+      {
+        start: 1,
+        size: 50
+      })
+      api.getList(axiosData).then(res => {
+        this.tableData = res.data.records
+      })
     }
+  },
+  created () {
+    this.getList()
+  },
+  activated () {
+    this.getList()
   }
 }
 </script>
