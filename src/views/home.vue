@@ -53,6 +53,7 @@
   <detail-modal
   :detailDialogVisible="detailDialogVisible"
   :detailData="detailData"
+  @onSubmit="onSubmit"
   @cancel="detailDialogVisible = false"></detail-modal>
 </div>
 </template>
@@ -111,11 +112,7 @@ export default {
         this.detailDialogVisible = false
       }
       this.getList()
-      // this.tableData.push(params)
     },
-    // cancel () {
-    //   this.dialogVisible = false
-    // },
     viewDetail (row, column, event) {
       this.detailData = row
       this.detailDialogVisible = true

@@ -106,7 +106,7 @@ export default {
   .item{
     position: relative;
     display: flex;
-    height: 60px;
+    // height: 60px;
     border-top: 1px solid #ccc;
     // margin-top: 20px;
     padding: 10px 0;

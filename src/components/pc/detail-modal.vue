@@ -164,7 +164,10 @@ export default {
         this.imgList = []
       } else {
         this.ruleForm = this.detailData
-        let pics = this.detailData.picUrl.split(',')
+        let pics = []
+        if (this.detailData.picUrl !== '') {
+          pics = this.detailData.picUrl.split(',')
+        }
         pics.map(v => {
           const obj = {
             name: '',

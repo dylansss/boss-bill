@@ -20,7 +20,10 @@ const api = {
   getList (params) {
     return Axios.post('fq', params)
   },
-  file (params) {
+  // file (params) {
+  //   return Axios.post('fq/file', params)
+  // },
+  uploadImg (params) {
     return Axios.post('fq/file', params)
   }
 }

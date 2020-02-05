@@ -16,18 +16,14 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="上传图片">
-        <el-upload
-          action="http://106.54.44.66:8080/watter/fq/file"
-          multiple
-          list-type="picture-card"
-          :on-preview="handlePictureCardPreview"
-          :on-remove="handleRemove"
-          :on-success="handleSuccess">
-          <i class="el-icon-plus"></i>
-        </el-upload>
-        <el-dialog :visible.sync="elDialogVisible" width="100%">
-          <img width="100%" :src="dialogImageUrl" alt="">
-        </el-dialog>
+        <div class="img-list">
+          <div class="img-item" v-for="(o, i) in fileList" :key="i">
+            <img :src="o" alt="" @click="viewDetail(o)" srcset="">
+            <i class="el-icon-circle-close" @click="removeImg(i)"></i>
+          </div>
+        </div>
+        <input class="ele-hidden" v-show="false" type="file"  accept="image/*" size="30" ref="getPhoto" @change="uploadAvatar">
+        <el-button type="primary" @click="uploadBtn">点击选择图片</el-button>
       </el-form-item>
       <el-form-item label="备注">
         <el-input v-model="ruleForm.memo"></el-input>
@@ -37,6 +33,16 @@
         <el-button @click="cancel">取消</el-button>
       </el-form-item>
     </el-form>
+    <el-dialog
+      title="图片"
+      :visible.sync="dialogVisible"
+      width="100%">
+      <img :src="dialogImgUrl" alt="" style="display: block;width: 100%;">
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">关闭</el-button>
+        <!-- <el-button type="primary" @click="dialogVisible = false">确 定</el-button> -->
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -46,10 +52,13 @@ export default {
   name: 'add-moadl',
   data () {
     return {
+      // imgUrl: '',
+      dialogImgUrl: '',
+      dialogVisible: false,
       imgList: [],
-      dialogImageUrl: '',
-      elDialogVisible: false,
-      // isShowDialog: this.dialogVisible,
+      fileList: [],
+      // dialogImageUrl: '',
+      // elDialogVisible: false,
       ruleForm: {
         picUrl: '',
         name: '',
@@ -77,6 +86,16 @@ export default {
           }).join(',')
           api.save(this.ruleForm).then(res => {
             if (res.status === 200) {
+              this.ruleForm = {
+                picUrl: '',
+                name: '',
+                money: '',
+                memo: '',
+                status: '2',
+                date: new Date().format('yyyy-MM-dd')
+              }
+              this.fileList = []
+              this.imgList = []
               this.$router.push('home-web')
             }
           })
@@ -89,29 +108,42 @@ export default {
       // this.$emit('cancel')
       this.$router.push('home-web')
     },
-    handleRemove (file, fileList) {
-      this.imgList = fileList.map(v => {
-        return {
-          name: v.name,
-          url: v.response ? v.response.data : v.url
+    uploadBtn () {
+      this.$refs.getPhoto.click()
+    },
+    uploadAvatar (node) {
+      let $file = node.target.files[0]
+      this.uploadImg($file)
+    },
+    uploadImg (file) {
+      let self = this
+      let formData = new FormData()
+      formData.append('file', file)
+      api.uploadImg(formData).then(res => {
+        console.log(res)
+        if (res.status === 200) {
+          this.imgList.push({
+            url: res.data
+          })
+          let reader = new FileReader()
+          // 将图片2将转成 base64 格式
+          reader.readAsDataURL(file)
+          // 读取成功后的回调
+          reader.onloadend = function () {
+            let result = this.result
+            console.log(result)
+            self.fileList.push(result)
+          }
         }
       })
     },
-    handlePictureCardPreview (file) {
-      this.dialogImageUrl = file.url
-      this.elDialogVisible = true
+    viewDetail (url) {
+      this.dialogImgUrl = url
+      this.dialogVisible = true
     },
-    handleSuccess (response, file, fileList) {
-      const obj = {
-        name: '',
-        url: response.data
-      }
-      this.imgList.push(obj)
-    }
-  },
-  watch: {
-    isShowDialog () {
-      this.ruleForm = this.detailData
+    removeImg (i) {
+      this.imgList.splice(i, 1)
+      this.fileList.splice(i, 1)
     }
   }
 }
@@ -124,38 +156,25 @@ export default {
   margin-bottom: 15px;
   text-indent: 1em;
 }
-/deep/.el-dialog{
-  /deep/.el-dialog__header{
-    padding: 10px 20px 0px;
+.img-list{
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  .img-item{
+    position: relative;
+    margin-right: 10px;
   }
-  /deep/.el-dialog__body{
-    padding: 15px 10px;
-    .el-form{
-      .el-form-item{
-        margin-bottom: 15px;
-      }
-    }
+  i{
+    font-size: 20px;
+    font-weight: bolder;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    color: red;
   }
-  /deep/.el-dialog__footer{
-    padding: 0px 20px 10px;
-  }
-}
-/deep/.el-upload{
-  width: 100px;
-  height: 100px;
-  line-height: 100px;
-}
-/deep/.el-upload-list{
-  /deep/.el-upload-list__item{
-    width: 100px;
-    height: 100px;
-  }
-}
-/deep/.el-progress{
-  width: 100px;
-  .el-progress-circle{
-    width: 100px!important;
-    height: 100px!important;
+  img{
+    display: block;
+    width: 50px;
   }
 }
 </style>
