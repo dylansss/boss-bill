@@ -1,4 +1,4 @@
-import './inter'
+// import './inter'
 import Axios from 'axios'
 
 const api = {
@@ -18,7 +18,15 @@ const api = {
     return Axios.post('fq/edit', params)
   },
   getList (params) {
-    return Axios.post('fq', params)
+    // console.log(params)
+    // return Axios.post('fq', params)
+    return Axios({
+      method: 'post',
+      url: 'fq',
+      data: params,
+      isLoad: false,
+      isAlert: false
+    })
   },
   // file (params) {
   //   return Axios.post('fq/file', params)
