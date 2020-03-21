@@ -72,7 +72,8 @@ export default {
     handleDetailData () {
       this.fileList = []
       this.detailData = JSON.parse(localStorage.getItem('detailData'))
-      let pics = this.detailData.picUrl.split(',')
+      let pics = this.detailData.picUrl ? this.detailData.picUrl.split(',') : []
+      console.log(pics)
       pics.map(v => {
         const obj = {
           name: '',
