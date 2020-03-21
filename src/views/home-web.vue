@@ -45,10 +45,8 @@ export default {
   data () {
     return {
       tableData: [],
-      // dialogVisible: false,
       detailData: {},
       currentPage: 0,
-      total: 400,
       searchParams: {
         name: '',
         startDate: new Date('2020-01-01')

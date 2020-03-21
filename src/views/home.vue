@@ -132,6 +132,7 @@ export default {
       })
       api.getList(axiosData).then(res => {
         this.tableData = res.data.records
+        this.total = res.data.total
       })
     },
     handleSizeChange (val) {

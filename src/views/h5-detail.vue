@@ -68,21 +68,26 @@ export default {
     handlePictureCardPreview (file) {
       this.dialogImageUrl = file.url
       this.elDialogVisible = true
+    },
+    handleDetailData () {
+      this.detailData = JSON.parse(localStorage.getItem('detailData'))
+      let pics = this.detailData.picUrl.split(',')
+      pics.map(v => {
+        const obj = {
+          name: '',
+          url: v
+        }
+        this.fileList.push(obj)
+      })
+      localStorage.removeItem('detailData')
     }
   },
   created () {
-    this.detailData = JSON.parse(localStorage.getItem('detailData'))
-    let pics = this.detailData.picUrl.split(',')
-    pics.map(v => {
-      const obj = {
-        name: '',
-        url: v
-      }
-      this.fileList.push(obj)
-    })
+    this.handleDetailData()
   },
   activated () {
-    this.detailData = JSON.parse(localStorage.getItem('detailData'))
+    this.handleDetailData()
+    // this.detailData = JSON.parse(localStorage.getItem('detailData'))
   }
 }
 </script>
