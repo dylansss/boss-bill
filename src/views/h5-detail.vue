@@ -70,6 +70,7 @@ export default {
       this.elDialogVisible = true
     },
     handleDetailData () {
+      this.fileList = []
       this.detailData = JSON.parse(localStorage.getItem('detailData'))
       let pics = this.detailData.picUrl.split(',')
       pics.map(v => {
